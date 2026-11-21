@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalkulator harga FOB ekspor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F1F5F4;--surface:#FFFFFF;--ink:#12262B;--muted:#566B71;--line:#D3DDDB;--accent:#1F6F5F;--on-accent:#FFFFFF;--tag:#F2C230;--on-tag:#2A2200;--c1:#1F6F5F;--c2:#4C8FA8;--c3:#8C9AA0;--c4:#C9873A;--c5:#F2C230;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E191C;--surface:#152327;--ink:#E7F0EE;--muted:#9DB1B5;--line:#263A3F;--accent:#4FB8A0;--on-accent:#06201A;--c1:#4FB8A0;--c2:#6FB0CA;--c3:#7E8F94;--c4:#D9964A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E191C;--surface:#152327;--ink:#E7F0EE;--muted:#9DB1B5;--line:#263A3F;--accent:#4FB8A0;--on-accent:#06201A;--c1:#4FB8A0;--c2:#6FB0CA;--c3:#7E8F94;--c4:#D9964A;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5}
+main{max-width:560px;margin:0 auto;padding:24px 16px 8px}
+h1{font-size:clamp(28px,8vw,38px);line-height:1.08;font-weight:800;font-stretch:80%;letter-spacing:-.01em;margin:0 0 10px}
+.lead{margin:0 0 6px;color:var(--muted);max-width:46ch}
+.def{margin:0 0 22px;padding-left:12px;border-left:3px solid var(--tag);font-size:14px;color:var(--muted);max-width:50ch}
+.field{margin-bottom:16px}
+label{display:block;font-weight:650;margin-bottom:2px}
+.hint{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.inp{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.inp:focus-within{border-color:var(--accent);outline:2px solid var(--accent);outline-offset:1px}
+.inp span{padding:0 4px 0 14px;color:var(--muted);font-weight:600}
+.inp span.end{padding:0 14px 0 4px}
+input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-size:18px;font-variant-numeric:tabular-nums;padding:12px 14px 12px 6px;outline:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 26px}
+button{font:inherit;font-weight:650;border-radius:10px;padding:10px 16px;cursor:pointer;border:1.5px solid var(--accent);background:var(--accent);color:var(--on-accent)}
+button.ghost{background:transparent;color:var(--accent)}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+h2{font-size:20px;font-weight:750;margin:0 0 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:22px}
+.bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--line);margin-bottom:14px}
+.bar i{display:block;height:100%;transition:width .25s}
+.leg{list-style:none;margin:0;padding:0}
+.leg li{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.leg li:first-child{border-top:0}
+.dot{width:12px;height:12px;border-radius:3px;flex:none}
+.leg .n{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:650}
+.leg .p{width:46px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums;font-size:14px}
+.sum{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:0 0 16px;font-variant-numeric:tabular-nums}
+.sum dt{color:var(--muted)}.sum dd{margin:0;font-weight:650;text-align:right}
+.note{font-size:13px;color:var(--muted);margin:0 0 22px;max-width:56ch}
+.warn{margin:0 0 14px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--tag);background:var(--surface);font-size:14px}.warn[hidden]{display:none}
+.next{border:1.5px dashed var(--accent);border-radius:12px;padding:14px 16px;margin-bottom:26px}
+.next p{margin:0 0 4px}.next p:last-child{margin:0;font-size:14px;color:var(--muted)}
+.dock{position:sticky;bottom:0;background:var(--tag);color:var(--on-tag);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:baseline;justify-content:space-between;gap:12px;box-shadow:0 -1px 0 rgba(0,0,0,.12)}
+.dock small{font-size:14px;font-weight:600}
+.dock output{font-size:clamp(26px,8vw,34px);font-weight:800;font-stretch:85%;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Hitung harga FOB ekspor</h1>
+  <p class="lead">Isi biaya dari pabrik sampai barang naik kapal. Harga jual per unit langsung muncul.</p>
+  <p class="def">FOB (Free On Board) adalah harga yang sudah mencakup semua biaya sampai barang berada di atas kapal di pelabuhan muat.</p>
+
+  <div class="field"><label for="price">Harga produk per unit</label><span class="hint">Harga beli atau biaya produksi per kg, pcs, atau satuan lain</span>
+    <div class="inp"><span>Rp</span><input id="price" data-m inputmode="numeric" autocomplete="off" placeholder="12.000"></div></div>
+  <div class="field"><label for="qty">Jumlah unit</label><span class="hint">Total unit dalam satu pengiriman</span>
+    <div class="inp"><input id="qty" data-m inputmode="numeric" autocomplete="off" placeholder="5.000"></div></div>
+  <div class="field"><label for="pack">Biaya packing</label><span class="hint">Total untuk seluruh pengiriman. Kosongkan jika sudah termasuk di harga produk</span>
+    <div class="inp"><span>Rp</span><input id="pack" data-m inputmode="numeric" autocomplete="off" placeholder="4.000.000"></div></div>
+  <div class="field"><label for="trans">Transport ke pelabuhan</label><span class="hint">Truk atau trucking dari gudang ke pelabuhan muat, total. Kosongkan jika sudah termasuk di harga produk</span>
+    <div class="inp"><span>Rp</span><input id="trans" data-m inputmode="numeric" autocomplete="off" placeholder="6.000.000"></div></div>
+  <div class="field"><label for="docs">Dokumen dan biaya pelabuhan</label><span class="hint">Misalnya jasa PPJK, CO, handling dan THC di pelabuhan muat, total. Kosongkan jika sudah termasuk di harga produk</span>
+    <div class="inp"><span>Rp</span><input id="docs" data-m inputmode="numeric" autocomplete="off" placeholder="9.000.000"></div></div>
+  <div class="field"><label for="mar">Margin keuntungan</label><span class="hint">Persen dari total biaya</span>
+    <div class="inp"><input id="mar" inputmode="decimal" autocomplete="off" placeholder="15"><span class="end">%</span></div></div>
+
+  <div class="row">
+    <button type="button" id="demo">Coba dengan contoh</button>
+    <button type="button" id="clr" class="ghost">Kosongkan</button>
+  </div>
+
+  <h2>Rincian harga</h2>
+  <div class="card">
+    <div class="bar" id="bar" role="img" aria-label="Komposisi harga FOB"></div>
+    <ul class="leg" id="leg"></ul>
+  </div>
+  <dl class="sum">
+    <dt>Total biaya</dt><dd id="tc">Rp 0</dd>
+    <dt>Biaya per unit</dt><dd id="uc">Rp 0</dd>
+    <dt>Laba total</dt><dd id="pf">Rp 0</dd>
+    <dt>Nilai FOB seluruh pengiriman</dt><dd id="ft">Rp 0</dd>
+  </dl>
+  <p class="warn" id="warn" hidden>Ada kolom biaya yang masih kosong. Pastikan biayanya memang sudah termasuk di harga produk. Kalau belum, isi dulu supaya harga FOB tidak terlalu rendah.</p>
+  <p class="note">Ini perkiraan sederhana. Biaya nyata berbeda tiap pelabuhan, forwarder, dan komoditas. Minta penawaran tertulis dari PPJK dan transporter sebelum memberi quotation ke buyer.</p>
+
+  <div class="next">
+    <p><strong>Versi lengkap sedang disiapkan.</strong></p>
+    <p>Hitung CIF, bandingkan beberapa skenario margin, dan checklist cari buyer. Komen WAITLIST di video TikTok @chiello_prasetya supaya dikabari.</p>
+  </div>
+</main>
+
+<div class="dock"><small>Harga FOB per unit</small><output id="fob" aria-live="polite">Rp 0</output></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const nf=new Intl.NumberFormat('id-ID',{maximumFractionDigits:0});
+const rp=n=>'Rp '+nf.format(Math.round(n));
+const val=id=>Number(String($(id).value).replace(/\./g,''))||0;
+const marg=()=>Math.max(0,Number(String($('mar').value).replace(',','.'))||0);
+const parts=[['Produk','c1'],['Packing','c2'],['Transport ke pelabuhan','c3'],['Dokumen dan pelabuhan','c4'],['Laba','c5']];
+
+function calc(){
+  const price=val('price'),qty=val('qty'),pack=val('pack'),trans=val('trans'),docs=val('docs'),m=marg();
+  const prod=price*qty,cost=prod+pack+trans+docs;
+  const fobT=cost*(1+m/100),profit=fobT-cost;
+  const fobU=qty>0?fobT/qty:0,costU=qty>0?cost/qty:0;
+  $('fob').textContent=rp(fobU);
+  $('warn').hidden=!(price>0&&qty>0&&(!pack||!trans||!docs));
+  $('tc').textContent=rp(cost);$('uc').textContent=rp(costU);
+  $('pf').textContent=rp(profit);$('ft').textContent=rp(fobT);
+  const vals=[prod,pack,trans,docs,profit];
+  const tot=fobT||1;
+  $('bar').innerHTML=vals.map((v,i)=>'<i style="width:'+(v/tot*100)+'%;background:var(--'+parts[i][1]+')"></i>').join('');
+  $('leg').innerHTML=vals.map((v,i)=>'<li><span class="dot" style="background:var(--'+parts[i][1]+')"></span>'+parts[i][0]+'<span class="n">'+rp(v)+'</span><span class="p">'+(fobT?Math.round(v/tot*100):0)+'%</span></li>').join('');
+}
+
+document.querySelectorAll('[data-m]').forEach(el=>el.addEventListener('input',()=>{
+  const d=el.value.replace(/\D/g,'');
+  el.value=d?nf.format(Number(d)):'';
+  calc();
+}));
+$('mar').addEventListener('input',calc);
+
+const demo={price:'12.000',qty:'5.000',pack:'4.000.000',trans:'6.000.000',docs:'9.000.000',mar:'15'};
+$('demo').onclick=()=>{for(const k in demo)$(k).value=demo[k];calc();};
+$('clr').onclick=()=>{for(const k in demo)$(k).value='';calc();};
+calc();
+</script>
+</body>
+</html>
